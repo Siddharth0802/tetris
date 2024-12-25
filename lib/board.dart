@@ -118,6 +118,10 @@ class _GameBoardState extends State<GameBoard> {
     startGame();
   }
 
+  void resetGame1() {
+    gameOver = true;
+  }
+
   //check for collision on future position
   //return true -> if collision
   //return false -> if no collision
@@ -255,12 +259,20 @@ class _GameBoardState extends State<GameBoard> {
 
   @override
   Widget build(BuildContext context) {
+    final currentWidth = MediaQuery.of(context).size.width;
+    final currentHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           //Game Grid
-          Expanded(
+          Container(
+            // decoration: (BoxDecoration(color: Colors.white)),
+            margin: EdgeInsets.only(top: 10, bottom: 1),
+            padding: EdgeInsets.only(top: 0, bottom: 0),
+            width: 0.4 * currentHeight,
+            height: 0.64 * currentHeight,
             child: GridView.builder(
               itemCount: rowLength * colLength,
               // physics: NeverScrollableScrollPhysics(),
@@ -282,8 +294,7 @@ class _GameBoardState extends State<GameBoard> {
 
                 else if (gameBoard[row][col] != null) {
                   final Tetromino? tetrominoType = gameBoard[row][col];
-                  return Pixel(
-                      color: tetrominoColors[tetrominoType]);
+                  return Pixel(color: tetrominoColors[tetrominoType]);
                 }
 
                 //blank pixel
@@ -296,34 +307,88 @@ class _GameBoardState extends State<GameBoard> {
             ),
           ),
 
+          Expanded(
+            child: SizedBox(),
+          ),
+          Expanded(
+            child: SizedBox(),
+          ),
+
           //SCORE
-          Text(
-            'Score: $currentScore',
-            style: TextStyle(color: Colors.white),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 2, color: Colors.white),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Text(
+                  'Score: $currentScore',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Container(
+                padding: EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 2, color: Colors.white),
+                    borderRadius: BorderRadius.circular(15)),
+                child: TextButton(
+                    onPressed: resetGame1,
+                    child: Text(
+                      "Reset",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    )),
+              ),
+            ],
+          ),
+
+          Expanded(
+            child: SizedBox(),
           ),
 
           //Game Controls
 
           Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
+            padding: const EdgeInsets.only(bottom: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                    onPressed: moveLeft,
-                    color: Colors.white,
-                    icon: Icon(Icons.arrow_back_ios)),
-                IconButton(
-                    onPressed: rotatePiece,
-                    color: Colors.white,
-                    icon: Icon(Icons.rotate_right)),
-                IconButton(
-                    onPressed: moveRight,
-                    color: Colors.white,
-                    icon: Icon(Icons.arrow_forward_ios)),
+                Expanded(
+                  child: SizedBox(),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 2, color: Colors.white),
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                          onPressed: moveLeft,
+                          color: Colors.blue[400],
+                          icon: Icon(Icons.arrow_back_ios)),
+                      IconButton(
+                          onPressed: rotatePiece,
+                          color: Colors.white,
+                          icon: Icon(Icons.rotate_right)),
+                      IconButton(
+                          onPressed: moveRight,
+                          color: Colors.blue[400],
+                          icon: Icon(Icons.arrow_forward_ios)),
+                    ],
+                  ),
+                ),
+                Expanded(child: SizedBox())
               ],
             ),
-          )
+          ),
         ],
       ),
     );
